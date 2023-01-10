@@ -11,7 +11,7 @@ impl F64 {
         F64 { x: x, dx: dx }
     }
     pub fn new(x: f64) -> Self {
-        F64 { x: x, dx: 1.0 }
+        F64 { x: x, dx: 0.0 }
     }
 }
 
