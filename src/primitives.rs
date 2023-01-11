@@ -5,3 +5,4 @@ pub trait Primitives<T> {
     fn log(x: T) -> T;
     fn sin(x: T) -> T;
 }
+// TODO pow?

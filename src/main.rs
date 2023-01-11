@@ -1,22 +1,16 @@
+use crate::derivative::derivative;
 use crate::float::F64;
-
+mod derivative;
 mod float;
 mod primitives;
-
 fn main() {
     println!("Hello, world!");
-    let test = F64 { x: 5.0, dx: 1.0 };
-    let sum = simple(&test);
     println!("Expect derivative at 5: 3 * a - 2 * a = 3*5^2 - 2 = 73");
-    println!("{:?}", sum);
+    println!("{:?}", derivative(simple, 5.0));
 }
+// highlights our first interesting issue: a real number r has to be lifted to (r,0) while a variable x to (x,1)
+// thankfully given a function f we know (through which its params are) about which are variables.
 
-fn simple(a: &F64) -> F64 {
-    let a1 = a * a;
-    println!("{:?}", a1);
-    let a2 = a1 - F64::new(2.0);
-    println!("{:?}", a2);
-    let a3 = a2 * a;
-    println!("{:?}", a3);
-    a3
+fn simple(a: F64) -> F64 {
+    a * (a * a - F64::new(2.0))
 }
