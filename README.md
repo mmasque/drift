@@ -20,4 +20,7 @@ assert_eq!(gradient(simple_arr, &[5.0, 2.0]), [155.0, 125.0])
 ```
 
 ## Todos
-1. Reverse mode support
+1. Reverse mode support.
+
+## References
+The [autodiff](https://github.com/elrnv/autodiff) crate was used to cross-check definitions and API setup. 
