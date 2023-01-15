@@ -1,4 +1,4 @@
-use std::usize;
+use std::{convert::TryInto, usize};
 
 use crate::float::F64;
 
@@ -37,7 +37,7 @@ where
             if i == coord {
                 F64::variable(*a)
             } else {
-                F64::new(*a)
+                F64::constant(*a)
             }
         })
         .collect::<Vec<F64>>()

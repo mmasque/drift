@@ -1,7 +1,6 @@
-use std::ops::Rem;
-
 use auto_ops::{impl_op, impl_op_ex};
 use num::{traits::Float, Num, NumCast, One, ToPrimitive, Zero};
+use std::ops::Rem;
 
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd)]
 pub struct F64 {
@@ -11,14 +10,14 @@ pub struct F64 {
 
 impl F64 {
     fn new_internal(x: f64, dx: f64) -> Self {
-        F64 { x: x, dx: dx }
+        F64 { x, dx }
     }
-    pub fn new(x: f64) -> Self {
-        F64 { x: x, dx: 0.0 }
+    pub fn constant(x: f64) -> Self {
+        F64 { x, dx: 0.0 }
     }
 
     pub fn variable(x: f64) -> Self {
-        F64 { x: x, dx: 1.0 }
+        F64 { x, dx: 1.0 }
     }
 }
 
@@ -40,7 +39,7 @@ impl One for F64 {
         self.x.is_one()
     }
     fn one() -> Self {
-        F64::new(f64::one())
+        F64::constant(f64::one())
     }
 
     fn set_one(&mut self) {
@@ -55,7 +54,7 @@ impl Zero for F64 {
         self.x.is_zero()
     }
     fn zero() -> Self {
-        F64::new(f64::zero())
+        F64::constant(f64::zero())
     }
     fn set_zero(&mut self) {
         self.x.set_zero();
@@ -66,7 +65,7 @@ impl Zero for F64 {
 impl Num for F64 {
     type FromStrRadixErr = <f64 as Num>::FromStrRadixErr;
     fn from_str_radix(str: &str, radix: u32) -> Result<Self, Self::FromStrRadixErr> {
-        f64::from_str_radix(str, radix).map(|x| F64::new(x))
+        f64::from_str_radix(str, radix).map(|x| F64::constant(x))
     }
 }
 
@@ -84,7 +83,7 @@ impl ToPrimitive for F64 {
 
 impl NumCast for F64 {
     fn from<T: num::ToPrimitive>(n: T) -> Option<Self> {
-        <f64 as NumCast>::from(n).map(|x| F64::new(x))
+        <f64 as NumCast>::from(n).map(|x| F64::constant(x))
     }
 }
 
@@ -96,7 +95,7 @@ impl_op_ex!(/ |a: &F64, b: &F64| -> F64 { F64::new_internal(a.x / b.x, (a.dx * b
 
 impl Float for F64 {
     fn nan() -> Self {
-        F64::new(f64::nan())
+        F64::constant(f64::nan())
     }
     fn abs(self) -> Self {
         F64 {
@@ -108,22 +107,22 @@ impl Float for F64 {
         }
     }
     fn infinity() -> Self {
-        F64::new(f64::infinity())
+        F64::constant(f64::infinity())
     }
     fn neg_infinity() -> Self {
-        F64::new(f64::neg_infinity())
+        F64::constant(f64::neg_infinity())
     }
     fn neg_zero() -> Self {
-        F64::new(f64::neg_zero())
+        F64::constant(f64::neg_zero())
     }
     fn min_value() -> Self {
-        F64::new(f64::min_value())
+        F64::constant(f64::min_value())
     }
     fn abs_sub(self, other: Self) -> Self {
         (self - other).abs()
     }
     fn signum(self) -> Self {
-        F64::new(self.x.signum())
+        F64::constant(self.x.signum())
     }
     fn is_nan(self) -> bool {
         self.x.is_nan() || self.dx.is_nan()
@@ -204,7 +203,7 @@ impl Float for F64 {
         }
     }
     fn epsilon() -> Self {
-        F64::new(f64::epsilon())
+        F64::constant(f64::epsilon())
     }
     fn exp(self) -> Self {
         F64 {
@@ -309,10 +308,10 @@ impl Float for F64 {
         }
     }
     fn max_value() -> Self {
-        F64::new(f64::max_value())
+        F64::constant(f64::max_value())
     }
     fn min_positive_value() -> Self {
-        F64::new(f64::min_positive_value())
+        F64::constant(f64::min_positive_value())
     }
     fn powf(self, n: Self) -> Self {
         F64 {
