@@ -6,7 +6,7 @@ use num::{traits::Float, Num, NumCast, One, ToPrimitive, Zero};
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd)]
 pub struct F64 {
     pub x: f64,
-    dx: f64,
+    pub dx: f64,
 }
 
 impl F64 {
