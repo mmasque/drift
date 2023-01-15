@@ -17,5 +17,7 @@ fn simple_arr(a: &[F64; 2]) -> F64 {
     
 assert_eq!(gradient(simple_arr, &[5.0, 2.0]), [155.0, 125.0])
 
-
 ```
+
+## Todos
+1. Reverse mode support
