@@ -125,7 +125,7 @@ impl Float for F64 {
         F64::constant(self.x.signum())
     }
     fn is_nan(self) -> bool {
-        self.x.is_nan() || self.dx.is_nan()
+        self.x.is_nan()
     }
     fn acos(self) -> Self {
         F64 {

@@ -4,7 +4,6 @@ use crate::float::F64;
 
 // TODO R^n -> R^m support
 // TODO reverse mode support
-// TODO borrowed/owned args
 
 pub fn derivative<F>(f: F, x: f64) -> F64
 where
@@ -13,7 +12,6 @@ where
     f(F64::variable(x))
 }
 
-// TODO it is not ideal to have coords passed as an int
 pub fn gradient<F, const S: usize>(f: F, x: &[f64; S]) -> [f64; S]
 where
     F: Fn(&[F64; S]) -> F64,
@@ -25,6 +23,7 @@ where
     result
 }
 
+// TODO it is not ideal to have coords passed as an int
 pub fn differential<F, const S: usize>(f: F, x: &[f64; S], coord: usize) -> F64
 where
     F: Fn(&[F64; S]) -> F64,
