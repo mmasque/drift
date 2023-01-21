@@ -1,7 +1,7 @@
 use std::{convert::TryInto, usize};
 
 use crate::float::F64;
-
+use ndarray;
 // TODO R^n -> R^m support
 // TODO reverse mode support
 
@@ -12,24 +12,23 @@ where
     f(F64::variable(x))
 }
 
-pub fn gradient<F, const S: usize>(f: F, x: &[f64; S]) -> [f64; S]
+pub fn gradient<F>(f: F, x: &ndarray::Array1<f64>) -> ndarray::Array1<f64>
 where
-    F: Fn(&[F64; S]) -> F64,
+    F: Fn(ndarray::Array1<F64>) -> F64,
 {
-    let mut result = [0.0; S];
-    for i in 0..S {
-        result[i] = differential(&f, x, i).dx;
+    let mut result = ndarray::Array1::<f64>::zeros(x.len());
+    for i in 0..x.len() {
+        result[i] = differential(&f, &x, i).dx;
     }
     result
 }
 
 // TODO it is not ideal to have coords passed as an int
-pub fn differential<F, const S: usize>(f: F, x: &[f64; S], coord: usize) -> F64
+pub fn differential<F>(f: F, x: &ndarray::Array1<f64>, coord: usize) -> F64
 where
-    F: Fn(&[F64; S]) -> F64,
+    F: Fn(ndarray::Array1<F64>) -> F64,
 {
-    assert!(coord < S, "Coordinate not in input range");
-    let k: &[F64; S] = &x
+    let k: ndarray::Array1<F64> = x
         .iter()
         .enumerate()
         .map(|(i, a)| {
@@ -39,8 +38,6 @@ where
                 F64::constant(*a)
             }
         })
-        .collect::<Vec<F64>>()
-        .try_into()
-        .unwrap();
+        .collect();
     f(k)
 }
