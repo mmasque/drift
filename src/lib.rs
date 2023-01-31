@@ -4,7 +4,7 @@ pub mod float;
 #[cfg(test)]
 mod tests {
     use crate::{
-        derivative::{derivative, differential, gradient},
+        derivative::{derivative, differential, differential_n, gradient},
         float::F64,
     };
     use num::Float;
@@ -17,7 +17,7 @@ mod tests {
     }
 
     fn simple_arr_n(a: ndarray::Array1<F64>) -> ndarray::Array1<F64> {
-        ndarray::array![a[0].powi(3) - a[1].powi(2), a[0].powi(3) + a[0].powi(2)]
+        ndarray::array![a[0].powi(3) - a[1].powi(2), a[0].powi(3) + a[1].powi(2)]
     }
 
     #[test]
@@ -44,10 +44,16 @@ mod tests {
         )
     }
 
-    // #[test]
-    // fn test_differential_n() {
-    //     println!("{:?}", differential(simple_arr, &[5.0, 2.0], 0));
-    //     // [3x^2, 3x^2] for dx and [-2y, 2y] for dy -> [3*5^2, 3 * 5^2] = [75, 75] for dx, [-10, 10] for dy
-    //     assert_eq!(differential_n(simple_arr_n, &[5.0, 2.0], 1), [75.0, 75.0])
-    // }
+    #[test]
+    fn test_differential_n() {
+        println!(
+            "{:?}",
+            differential(simple_arr, &ndarray::array![5.0, 2.0], 0)
+        );
+        // [3x^2, 3x^2] for dx and [-2y, 2y] for dy -> [3*5^2, 3 * 5^2] = [75, 75] for dx, [-10, 10] for dy
+        assert_eq!(
+            differential_n(simple_arr_n, &ndarray::array![5.0, 2.0], 0).map(|x| x.dx),
+            ndarray::array![75.0, 75.0]
+        )
+    }
 }

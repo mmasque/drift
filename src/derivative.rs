@@ -41,3 +41,21 @@ where
         .collect();
     f(k)
 }
+
+pub fn differential_n<F>(f: F, x: &ndarray::Array1<f64>, coord: usize) -> ndarray::Array1<F64>
+where
+    F: Fn(ndarray::Array1<F64>) -> ndarray::Array1<F64>,
+{
+    let k: ndarray::Array1<F64> = x
+        .iter()
+        .enumerate()
+        .map(|(i, a)| {
+            if i == coord {
+                F64::variable(*a)
+            } else {
+                F64::constant(*a)
+            }
+        })
+        .collect();
+    f(k)
+}
