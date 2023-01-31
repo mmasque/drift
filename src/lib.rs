@@ -19,7 +19,15 @@ mod tests {
     fn simple_arr_n(a: ndarray::Array1<F64>) -> ndarray::Array1<F64> {
         ndarray::array![a[0].powi(3) - a[1].powi(2), a[0].powi(3) + a[1].powi(2)]
     }
-
+    #[test]
+    fn test_sum() {
+        let a = [
+            F64 { x: 1.0, dx: -1.0 },
+            F64 { x: 2.0, dx: -2.0 },
+            F64 { x: 3.0, dx: -3.0 },
+        ];
+        assert_eq!(a.iter().sum::<F64>(), F64 { x: 6.0, dx: -6.0 });
+    }
     #[test]
     fn test_derivative() {
         fn simple(a: F64) -> F64 {
@@ -54,6 +62,6 @@ mod tests {
         assert_eq!(
             differential_n(simple_arr_n, &ndarray::array![5.0, 2.0], 0).map(|x| x.dx),
             ndarray::array![75.0, 75.0]
-        )
+        );
     }
 }

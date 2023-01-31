@@ -1,6 +1,6 @@
 use auto_ops::{impl_op, impl_op_ex};
 use num::{traits::Float, Num, NumCast, One, ToPrimitive, Zero};
-use std::ops::Rem;
+use std::{iter::Sum, ops::Rem};
 
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd)]
 pub struct F64 {
@@ -93,6 +93,11 @@ impl_op_ex!(-|a: &F64, b: &F64| -> F64 { F64::new_internal(a.x - b.x, a.dx - b.d
 impl_op_ex!(*|a: &F64, b: &F64| -> F64 { F64::new_internal(a.x * b.x, a.dx * b.x + a.x * b.dx) });
 impl_op_ex!(/ |a: &F64, b: &F64| -> F64 { F64::new_internal(a.x / b.x, (a.dx * b.x - a.x * b.dx) / (b.x * b.x)) });
 
+impl<'a> Sum<&'a Self> for F64 {
+    fn sum<I: Iterator<Item = &'a Self>>(iter: I) -> Self {
+        iter.fold(F64::zero(), |acc, x| acc + x)
+    }
+}
 impl Float for F64 {
     fn nan() -> Self {
         F64::constant(f64::nan())
