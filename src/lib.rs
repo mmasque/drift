@@ -9,14 +9,14 @@ mod tests {
     };
     use num::Float;
 
-    fn simple_arr(a: ndarray::Array1<F64>) -> F64 {
+    fn simple_arr(a: &ndarray::Array1<F64>) -> F64 {
         // x^3 * y + 5x.
         // dx is 3x^2y + 5; dy is x^3. - at (5,2) dx is 155, 125
 
         a[0].powi(3) * a[1] + F64::constant(5.0) * a[0]
     }
 
-    fn simple_arr_n(a: ndarray::Array1<F64>) -> ndarray::Array1<F64> {
+    fn simple_arr_n(a: &ndarray::Array1<F64>) -> ndarray::Array1<F64> {
         ndarray::array![a[0].powi(3) - a[1].powi(2), a[0].powi(3) + a[1].powi(2)]
     }
     #[test]

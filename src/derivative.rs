@@ -14,7 +14,7 @@ where
 
 pub fn gradient<F>(f: F, x: &ndarray::Array1<f64>) -> ndarray::Array1<f64>
 where
-    F: Fn(ndarray::Array1<F64>) -> F64,
+    F: Fn(&ndarray::Array1<F64>) -> F64,
 {
     let mut result = ndarray::Array1::<f64>::zeros(x.len());
     for i in 0..x.len() {
@@ -26,7 +26,7 @@ where
 // TODO it is not ideal to have coords passed as an int
 pub fn differential<F>(f: F, x: &ndarray::Array1<f64>, coord: usize) -> F64
 where
-    F: Fn(ndarray::Array1<F64>) -> F64,
+    F: Fn(&ndarray::Array1<F64>) -> F64,
 {
     let k: ndarray::Array1<F64> = x
         .iter()
@@ -39,12 +39,12 @@ where
             }
         })
         .collect();
-    f(k)
+    f(&k)
 }
 
 pub fn differential_n<F>(f: F, x: &ndarray::Array1<f64>, coord: usize) -> ndarray::Array1<F64>
 where
-    F: Fn(ndarray::Array1<F64>) -> ndarray::Array1<F64>,
+    F: Fn(&ndarray::Array1<F64>) -> ndarray::Array1<F64>,
 {
     let k: ndarray::Array1<F64> = x
         .iter()
@@ -57,5 +57,16 @@ where
             }
         })
         .collect();
-    f(k)
+    f(&k)
+}
+
+pub fn jacobian<F>(f: F, x: &ndarray::Array1<f64>) -> ndarray::Array2<F64>
+where
+    F: Fn(&ndarray::Array1<F64>) -> ndarray::Array1<F64>,
+{
+    // have to run the computation for each input dimension
+    for i in 0..x.len() {
+        differential_n(&f, x, i);
+    }
+    todo!()
 }
