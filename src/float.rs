@@ -92,7 +92,11 @@ impl_op_ex!(+ |a: &F64, b: &F64| -> F64 { F64::new_internal(a.x + b.x, a.dx + b.
 impl_op_ex!(-|a: &F64, b: &F64| -> F64 { F64::new_internal(a.x - b.x, a.dx - b.dx) });
 impl_op_ex!(*|a: &F64, b: &F64| -> F64 { F64::new_internal(a.x * b.x, a.dx * b.x + a.x * b.dx) });
 impl_op_ex!(/ |a: &F64, b: &F64| -> F64 { F64::new_internal(a.x / b.x, (a.dx * b.x - a.x * b.dx) / (b.x * b.x)) });
-
+impl Sum for F64 {
+    fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
+        iter.sum()
+    }
+}
 impl<'a> Sum<&'a Self> for F64 {
     fn sum<I: Iterator<Item = &'a Self>>(iter: I) -> Self {
         iter.fold(F64::zero(), |acc, x| acc + x)
