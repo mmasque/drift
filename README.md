@@ -1,6 +1,5 @@
 # drift
 ![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)
-[![Build Status](https://github.com/mmasque/drift/.github/workflows/CI.yml/badge.svg)](https://github.com/mozilla/mmasque/.github/workflows/CI.yml)
 
 A rudimentary implementation of automatic differentiation written in Rust. Currently supports forward mode 
 automatic differentiation using Operator Overloading. Currently supports functions of the form R^n -> R. 
