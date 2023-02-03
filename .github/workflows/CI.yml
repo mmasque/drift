@@ -62,3 +62,6 @@ jobs:
         with:
           command: clippy
           args: -- -D warnings
+
+- name: rust-grcov
+  uses: actions-rs/grcov@v0.1.5
