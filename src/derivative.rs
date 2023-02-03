@@ -1,4 +1,4 @@
-use std::{convert::TryInto, usize};
+use std::usize;
 
 use crate::float::F64;
 use ndarray::{self, Array2};
@@ -18,7 +18,7 @@ where
 {
     let mut result = ndarray::Array1::<f64>::zeros(x.len());
     for i in 0..x.len() {
-        result[i] = differential(&f, &x, i).dx;
+        result[i] = differential(&f, x, i).dx;
     }
     result
 }
