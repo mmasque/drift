@@ -80,6 +80,7 @@ mod tests {
             array![[75.0, 75.0], [-4.0, 4.0]]
         )
     }
+    #[test]
     fn test_jacobian_3_2() {
         // jacobian test with 3 input dims, 2 output dims
         assert_eq!(

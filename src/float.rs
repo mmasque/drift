@@ -65,7 +65,7 @@ impl Zero for F64 {
 impl Num for F64 {
     type FromStrRadixErr = <f64 as Num>::FromStrRadixErr;
     fn from_str_radix(str: &str, radix: u32) -> Result<Self, Self::FromStrRadixErr> {
-        f64::from_str_radix(str, radix).map(|x| F64::constant(x))
+        f64::from_str_radix(str, radix).map(F64::constant)
     }
 }
 
@@ -83,7 +83,7 @@ impl ToPrimitive for F64 {
 
 impl NumCast for F64 {
     fn from<T: num::ToPrimitive>(n: T) -> Option<Self> {
-        <f64 as NumCast>::from(n).map(|x| F64::constant(x))
+        <f64 as NumCast>::from(n).map(F64::constant)
     }
 }
 
