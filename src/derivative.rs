@@ -1,7 +1,7 @@
 use std::{convert::TryInto, usize};
 
 use crate::float::F64;
-use ndarray;
+use ndarray::{self, Array2};
 // TODO R^n -> R^m support
 // TODO reverse mode support
 
@@ -14,7 +14,7 @@ where
 
 pub fn gradient<F>(f: F, x: &ndarray::Array1<f64>) -> ndarray::Array1<f64>
 where
-    F: Fn(ndarray::Array1<F64>) -> F64,
+    F: Fn(&ndarray::Array1<F64>) -> F64,
 {
     let mut result = ndarray::Array1::<f64>::zeros(x.len());
     for i in 0..x.len() {
@@ -26,7 +26,7 @@ where
 // TODO it is not ideal to have coords passed as an int
 pub fn differential<F>(f: F, x: &ndarray::Array1<f64>, coord: usize) -> F64
 where
-    F: Fn(ndarray::Array1<F64>) -> F64,
+    F: Fn(&ndarray::Array1<F64>) -> F64,
 {
     let k: ndarray::Array1<F64> = x
         .iter()
@@ -39,12 +39,12 @@ where
             }
         })
         .collect();
-    f(k)
+    f(&k)
 }
 
 pub fn differential_n<F>(f: F, x: &ndarray::Array1<f64>, coord: usize) -> ndarray::Array1<F64>
 where
-    F: Fn(ndarray::Array1<F64>) -> ndarray::Array1<F64>,
+    F: Fn(&ndarray::Array1<F64>) -> ndarray::Array1<F64>,
 {
     let k: ndarray::Array1<F64> = x
         .iter()
@@ -57,5 +57,24 @@ where
             }
         })
         .collect();
-    f(k)
+    f(&k)
+}
+
+/// Jacobian matrix calculation. Convention used: each input variable in its own row (i.e. row 0 is partials of x0, etc).  
+pub fn jacobian<F>(f: F, x: &ndarray::Array1<f64>) -> ndarray::Array2<f64>
+where
+    F: Fn(&ndarray::Array1<F64>) -> ndarray::Array1<F64>,
+{
+    // have to run the computation for each input dimension
+    // TODO right now we cannot know the size of the output array of f,
+    // which is why I might move this to nalgebra.
+    let nrows = x.len();
+    let mut nested = Vec::new();
+    for i in 0..x.len() {
+        // this is the recommended way: https://docs.rs/ndarray/0.15.1/ndarray/struct.ArrayBase.html#conversions-from-nested-vecsarrays
+        let col: Vec<f64> = differential_n(&f, x, i).iter().map(|x| x.dx).collect();
+        nested.extend_from_slice(&col);
+    }
+    // TODO proper error handling
+    Array2::from_shape_vec((nrows, nested.len() / nrows), nested).unwrap()
 }
