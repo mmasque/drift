@@ -1,4 +1,4 @@
-# drift
+# `drift`
 ![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)
 [![codecov](https://codecov.io/gh/mmasque/drift/branch/main/graph/badge.svg?token=YNBO0EP77J)](https://codecov.io/gh/mmasque/drift)
 
