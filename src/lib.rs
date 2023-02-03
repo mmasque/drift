@@ -4,9 +4,10 @@ pub mod float;
 #[cfg(test)]
 mod tests {
     use crate::{
-        derivative::{derivative, differential, differential_n, gradient},
+        derivative::{derivative, differential, differential_n, gradient, jacobian},
         float::F64,
     };
+    use ndarray::array;
     use num::Float;
 
     fn simple_arr(a: &ndarray::Array1<F64>) -> F64 {
@@ -17,7 +18,16 @@ mod tests {
     }
 
     fn simple_arr_n(a: &ndarray::Array1<F64>) -> ndarray::Array1<F64> {
+        // x^3 - y^2, x^3 + y^2
         ndarray::array![a[0].powi(3) - a[1].powi(2), a[0].powi(3) + a[1].powi(2)]
+    }
+
+    fn simple_arr_n_m(a: &ndarray::Array1<F64>) -> ndarray::Array1<F64> {
+        // x^3 - y^2, x^3 + y^2 + z^2
+        ndarray::array![
+            a[0].powi(3) - a[1].powi(2),
+            a[0].powi(3) + a[1].powi(2) + a[2].powi(2)
+        ]
     }
     #[test]
     fn test_sum() {
@@ -54,14 +64,27 @@ mod tests {
 
     #[test]
     fn test_differential_n() {
-        println!(
-            "{:?}",
-            differential(simple_arr, &ndarray::array![5.0, 2.0], 0)
-        );
-        // [3x^2, 3x^2] for dx and [-2y, 2y] for dy -> [3*5^2, 3 * 5^2] = [75, 75] for dx, [-10, 10] for dy
+        // [3x^2, 3x^2] for dx and [-2y, 2y] for dy -> [3*5^2, 3 * 5^2] = [75, 75] for dx, [-4, 4] for dy
         assert_eq!(
-            differential_n(simple_arr_n, &ndarray::array![5.0, 2.0], 0).map(|x| x.dx),
-            ndarray::array![75.0, 75.0]
+            differential_n(simple_arr_n, &ndarray::array![5.0, 2.0], 1).map(|x| x.dx),
+            ndarray::array![-4.0, 4.0]
         );
+    }
+
+    #[test]
+    fn test_jacobian_square() {
+        // simple_array_n has [3x^2, 3x^2] for dx and [-2y, 2y] for dy -> [3*5^2, 3 * 5^2] = [75, 75] for dx, [-4, 4] for dy
+        // at [5, 2]. jacobian rows are dfi/dx, i.e. variable per row, function component per col
+        assert_eq!(
+            jacobian(simple_arr_n, &ndarray::array![5.0, 2.0]),
+            array![[75.0, 75.0], [-4.0, 4.0]]
+        )
+    }
+    fn test_jacobian_3_2() {
+        // jacobian test with 3 input dims, 2 output dims
+        assert_eq!(
+            jacobian(simple_arr_n_m, &ndarray::array![5.0, 2.0, 3.0]),
+            array![[75.0, 75.0], [-4.0, 4.0], [0.0, 6.0]]
+        )
     }
 }
