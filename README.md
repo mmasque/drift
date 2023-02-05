@@ -1,5 +1,6 @@
 # `drift`
 ![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)
+![build](https://github.com/mmasque/drift/actions/workflows/CI.yml/badge.svg?event=push)
 [![codecov](https://codecov.io/gh/mmasque/drift/branch/main/graph/badge.svg?token=YNBO0EP77J)](https://codecov.io/gh/mmasque/drift)
 
 A rudimentary implementation of automatic differentiation written in Rust. Currently supports forward mode 
