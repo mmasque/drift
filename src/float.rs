@@ -15,6 +15,10 @@ impl F64 {
     pub fn constant(x: f64) -> Self {
         F64 { x, dx: 0.0 }
     }
+    
+    pub fn c(x: f64) -> Self {
+        F64::constant(x)
+    }
 
     pub fn variable(x: f64) -> Self {
         F64 { x, dx: 1.0 }
