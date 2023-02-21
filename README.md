@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/mmasque/drift/branch/main/graph/badge.svg?token=YNBO0EP77J)](https://codecov.io/gh/mmasque/drift)
 
 A rudimentary implementation of automatic differentiation written in Rust. Currently supports forward mode 
-automatic differentiation using Operator Overloading. Currently supports functions of the form R^n -> R. 
+automatic differentiation using Operator Overloading. Currently supports functions of the form R^n -> R^m. 
 Can compute individual partial derivatives via `differential`, gradient via `gradient`. `derivative` can be used when
 dealing with R -> R functions. 
 
