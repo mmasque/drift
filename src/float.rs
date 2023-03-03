@@ -23,6 +23,10 @@ impl F64 {
     pub fn variable(x: f64) -> Self {
         F64 { x, dx: 1.0 }
     }
+    
+    pub fn v(x: f64) -> Self {
+        F64::variable(x)
+    }
 }
 
 impl Rem for F64 {
